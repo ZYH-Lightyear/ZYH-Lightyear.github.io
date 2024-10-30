@@ -21,7 +21,7 @@ repository               : "zyh-lightyear/zyh-lightyear.github.io"
 #               Additional customization can be done by editing /_includes/author-profile.html
 author:
   # Biographic information
-  avatar           : "profile.png"
+  avatar           : "avatar.png"
   name             : "Yehang Zhang"
   pronouns         : # example: "she/her"  
   bio              : "If u like Family Guy, we should be friends"
