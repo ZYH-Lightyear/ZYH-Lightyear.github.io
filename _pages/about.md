@@ -7,7 +7,7 @@ redirect_from:
   - /about.html
 ---
 
-I am a first-year MPhil student in Artificial Intelligence at the [ Hong Kong University of Science and Technology (Guangzhou)]([https://pages.github.com](https://www.hkust-gz.edu.cn/)), within the Information Hub and the AI Thrust. My research interests include LLM agents, computer vision, and multimodal learning. I am fortunate to be advised by Professor Chen Yingcong. I completed my undergraduate studies at China University of Geosciences (Wuhan), earning a Bachelor of Engineering degree in Computer Science and Technology.
+I am a first-year MPhil student in Artificial Intelligence at the [ Hong Kong University of Science and Technology (Guangzhou)](https://www.hkust-gz.edu.cn/), within the Information Hub and the AI Thrust. My research interests include LLM agents, computer vision, and multimodal learning. I am fortunate to be advised by Professor Chen Yingcong. I completed my undergraduate studies at China University of Geosciences (Wuhan), earning a Bachelor of Engineering degree in Computer Science and Technology.
 
 Education
 ======
