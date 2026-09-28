@@ -1,10 +1,12 @@
 import assert from "node:assert/strict";
-import { mkdir } from "node:fs/promises";
+import { mkdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import { chromium } from "playwright";
-import { root } from "./build.mjs";
+import { root, getSite } from "./build.mjs";
 
 const base = process.env.TEST_URL || "http://127.0.0.1:4173";
+const site = await getSite();
+const approvedCitations = JSON.parse(await readFile(path.join(root, "scripts/fixtures/approved-citations.json"), "utf8"));
 const screenshots = path.join(root, "test-results");
 await mkdir(screenshots, { recursive: true });
 const browser = await chromium.launch({
@@ -46,9 +48,22 @@ try {
   assert.equal(await page.locator(".world-hotspot").count(), 5);
   assert.ok(await page.locator("#workspace-popover").isHidden());
   assert.equal(await page.locator("#district-detail, #district-action").count(), 0);
-  assert.equal(await page.locator(".publication-card:visible").count(), 6);
+  assert.equal(await page.locator(".publication-card:visible").count(), 7);
+  assert.equal(await page.locator(".publication-card:visible").first().getAttribute("data-paper"), "world-action-agent");
   assert.equal(await page.locator('[data-paper="dalfnet"]').count(), 0);
   assert.equal(await page.locator(".paper-art:visible").count(), 0);
+  assert.ok(await page.locator(".authorship-legend").isVisible());
+  for (const paper of site.publications) {
+    const card = page.locator(`[data-paper="${paper.slug}"]`);
+    const authors = paper.authors.replace(", and ", ", ").split(", ");
+    assert.deepEqual(await card.locator(".paper-author").evaluateAll(nodes => nodes.map(n => n.dataset.author)), authors);
+    for (const author of authors) {
+      const node = card.locator(`.paper-author[data-author="${author}"]`);
+      assert.equal(await node.locator('[title="Co-first author"]').count(), Number(paper.co_first_authors.includes(author)));
+      assert.equal(await node.locator('[title="Corresponding author"]').count(), Number(paper.corresponding_authors.includes(author)));
+    }
+  }
+  report("co-first and corresponding-author markers match every publication's metadata");
   assert.equal(await page.locator(".pub-button").count(), 2);
   assert.equal(await page.locator(".resume-row").count(), 4);
   assert.equal(await page.locator('[data-filter="all"]').getAttribute("aria-pressed"), "true");
@@ -65,7 +80,7 @@ try {
     .locator("#world-frame")
     .screenshot({ path: path.join(screenshots, "world-day.png") });
   report(
-    "desktop WebGL renderer, five hotspots, six papers by default, four résumé rows",
+    "desktop WebGL renderer, five hotspots, seven papers by default, four résumé rows",
   );
 
   // Click the real Three.js book and photo geometries at the fixed overview camera.
@@ -122,7 +137,7 @@ try {
   assert.ok(await page.locator("#workspace-popover").isVisible());
   assert.equal(await page.locator("#workspace-popover").evaluate(node => node.getAnimations().length), 0);
   await page.keyboard.press("Escape");
-  assert.equal(await page.locator(".publication-card:visible").count(), 6);
+  assert.equal(await page.locator(".publication-card:visible").count(), 7);
   await page.locator("#publications").screenshot({ path: path.join(screenshots, "publications-all.png") });
   await page.locator("#experience").screenshot({ path: path.join(screenshots, "experience.png") });
   await page.locator('[data-filter="selected"]').click();
@@ -146,8 +161,7 @@ try {
   const clipboard = await page.evaluate(() => navigator.clipboard.readText());
   assert.ok(clipboard.includes("Orchestrating Audio"));
   assert.match(clipboard, /^@inproceedings\{/);
-  assert.ok(clipboard.includes("author = {Yehang Zhang and Xinli Xu"));
-  assert.ok(clipboard.includes("doi = {10.18653/v1/2025.emnlp-main.1133}"));
+  assert.equal(clipboard, approvedCitations["orchestrating-audio"]);
   await page.locator("#content-dialog").screenshot({ path: path.join(screenshots, "bibtex.png") });
   await page.keyboard.press("Escape");
   assert.ok(
@@ -158,6 +172,15 @@ try {
     "orchestrating-audio",
   );
   report("paper dialog, working citation copy, Escape and focus restoration");
+  await page.locator('[data-filter="all"]').click();
+  for (const [slug, citation] of Object.entries(approvedCitations)) {
+    await page.locator(`[data-cite="${slug}"]`).click();
+    assert.equal(await page.locator(".citation-text").textContent(), citation);
+    await page.locator(".copy-citation").click();
+    assert.equal(await page.evaluate(() => navigator.clipboard.readText()), citation);
+    await page.keyboard.press("Escape");
+  }
+  report("all seven Cite dialogs copy the complete user-approved BibTeX exactly");
 
   await page.locator('[data-notebook="memory"]').click();
   assert.equal(await page.locator("#dialog-title").textContent(), "On memory");
@@ -196,7 +219,7 @@ try {
 
   await page.locator("#academic-toggle").click();
   assert.ok(await page.locator("#neighborhood").isHidden());
-  assert.equal(await page.locator(".publication-card:visible").count(), 6);
+  assert.equal(await page.locator(".publication-card:visible").count(), 7);
   await page.reload();
   assert.ok(await page.locator("#neighborhood").isHidden());
   assert.equal(
@@ -308,7 +331,7 @@ try {
   await fallback.page.locator("#close-workspace-popover").click();
   assert.equal(
     await fallback.page.locator(".publication-card:visible").count(),
-    6,
+    7,
   );
   report(
     "WebGL-unavailable fallback preserves district navigation and publications",
@@ -320,7 +343,7 @@ try {
     viewport: { width: 1024, height: 768 },
   });
   await nojs.page.goto(base);
-  assert.equal(await nojs.page.locator(".publication-card:visible").count(), 6);
+  assert.equal(await nojs.page.locator(".publication-card:visible").count(), 7);
   assert.ok(
     await nojs.page.locator('a[href*="I_C_lPYAAAAJ"]').first().isVisible(),
   );

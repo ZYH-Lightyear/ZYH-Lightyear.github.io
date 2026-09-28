@@ -18,7 +18,7 @@ districts:
     label: REMEMBER · PLAN · ACT
     color: "#bd704b"
     description: ""
-    papers: [worldlines, videomemory]
+    papers: [world-action-agent, worldlines, videomemory]
   - id: workshop
     number: "03"
     name: The Workshop

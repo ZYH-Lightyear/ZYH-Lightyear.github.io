@@ -273,6 +273,7 @@
             >{{ site.publications.size }} papers</span
           >
         </div>
+        <p class="authorship-legend"><span>† Co-first author</span><span>✉ Corresponding author</span></p>
         <div
           class="publication-view"
           data-publication-view="core"
@@ -310,7 +311,7 @@
                 >
               </h3>
               <!-- prettier-ignore -->
-              <p class="pub-list-authors">{{ paper.authors | escape | replace: 'Y. Zhang', '<strong>Y. Zhang</strong>' | replace: 'Yehang Zhang', '<strong>Yehang Zhang</strong>' }}</p>
+              <p class="pub-list-authors">{% assign author_names = paper.authors | replace: ', and ', ', ' | split: ', ' %}{% for author in author_names %}{% unless forloop.first %}, {% if forloop.last %}and {% endif %}{% endunless %}<span class="paper-author" data-author="{{ author | escape }}">{% if author == 'Yehang Zhang' %}<strong>{{ author | escape }}</strong>{% else %}{{ author | escape }}{% endif %}{% if paper.co_first_authors contains author %}<sup class="author-mark" title="Co-first author" aria-label="Co-first author">†</sup>{% endif %}{% if paper.corresponding_authors contains author %}<sup class="author-mark" title="Corresponding author" aria-label="Corresponding author">✉</sup>{% endif %}</span>{% endfor %}</p>
               <p class="paper-venue">{{ paper.display_venue }}</p>
               <div class="paper-links">
                 <a

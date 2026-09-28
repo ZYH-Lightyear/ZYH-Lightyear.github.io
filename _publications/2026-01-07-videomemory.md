@@ -1,15 +1,17 @@
 ---
 title: "VideoMemory: Toward Consistent Video Generation via Memory Integration"
 collection: publications
+co_first_authors: [Jinsong Zhou, Yihua Du, Xinli Xu]
+corresponding_authors: [Ying-Cong Chen]
 bibtex: |-
-  @misc{videomemory2026,
-    title = {{VideoMemory: Toward Consistent Video Generation via Memory Integration}},
-    author = {Jinsong Zhou and Yihua Du and Xinli Xu and Luozhou Wang and Zijie Zhuang and Yehang Zhang and Shuaibo Li and Xiaojun Hu and Bolan Su and Ying-Cong Chen},
-    year = {2026},
-    eprint = {2601.03655},
-    archivePrefix = {arXiv},
-    primaryClass = {cs.CV},
-    url = {https://arxiv.org/abs/2601.03655}
+  @misc{zhou2026videomemoryconsistentvideogeneration,
+    title={VideoMemory: Toward Consistent Video Generation via Memory Integration},
+    author={Jinsong Zhou and Yihua Du and Xinli Xu and Luozhou Wang and Zijie Zhuang and Yehang Zhang and Shuaibo Li and Xiaojun Hu and Bolan Su and Ying-cong Chen},
+    year={2026},
+    eprint={2601.03655},
+    archivePrefix={arXiv},
+    primaryClass={cs.CV},
+    url={https://arxiv.org/abs/2601.03655},
   }
 slug: videomemory
 short_title: VideoMemory

@@ -880,6 +880,23 @@ svg.icon {
   color: var(--green);
   font-weight: 600;
 }
+.authorship-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 20px;
+  margin: 0 0 12px;
+  color: #626b61;
+  font-size: 12px;
+}
+.paper-author {
+  white-space: nowrap;
+}
+.author-mark {
+  margin-left: 1px;
+  font-size: 0.75em;
+  line-height: 0;
+  vertical-align: super;
+}
 .paper-venue {
   font-size: 14px;
   color: #626b61;

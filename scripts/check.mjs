@@ -5,10 +5,11 @@ import path from "node:path";
 import { root, getSite, bundleAssets, renderPages } from "./build.mjs";
 
 const site = await getSite();
+const approvedCitations = JSON.parse(await readFile(path.join(root, "scripts/fixtures/approved-citations.json"), "utf8"));
 assert.equal(
   site.publications.length,
-  6,
-  "Show six publications; keep DALFNet unpublished.",
+  7,
+  "Show seven publications including World Action Agent; keep DALFNet unpublished.",
 );
 assert.ok(
   site.publications.every((paper) => !/\bPCSA\b|DALFNet/i.test(paper.title)),
@@ -29,9 +30,17 @@ for (const paper of site.publications) {
     `Incomplete publication: ${paper.slug}`,
   );
   assert.equal(new URL(paper.paperurl).protocol, "https:");
-  assert.match(paper.bibtex, /^@(inproceedings|misc)\{/);
-  assert.ok(paper.bibtex.includes(paper.title));
-  assert.ok(paper.bibtex.includes(paper.paperurl));
+  assert.match(paper.bibtex, /^@(inproceedings|misc|article)\{/i);
+  assert.equal(paper.bibtex, approvedCitations[paper.slug], `Preserve the user-provided citation for ${paper.slug}.`);
+  assert.ok(paper.bibtex.toLowerCase().includes(paper.title.toLowerCase()));
+  assert.ok(paper.bibtex.includes(paper.paperurl.replace("https://doi.org/", "")));
+  assert.ok(!/\]\(https?:|&#x/.test(paper.bibtex), "Do not copy Markdown/HTML wrappers into BibTeX.");
+  const authors = paper.authors.replace(", and ", ", ").split(", ");
+  for (const role of ["co_first_authors", "corresponding_authors"]) {
+    assert.ok(Array.isArray(paper[role]), `Missing authorship data for ${paper.slug}.`);
+    assert.equal(new Set(paper[role]).size, paper[role].length);
+    for (const author of paper[role]) assert.ok(authors.includes(author), `Unknown ${role}: ${author}`);
+  }
 }
 assert.deepEqual(site.publications.filter(p => p.selected).map(p => p.slug).sort(),
   ["orchestrating-audio", "videomemory", "worldlines"]);
@@ -44,15 +53,25 @@ for (const district of site.data.studio.districts) {
 }
 await bundleAssets();
 const { html } = await renderPages();
+assert.ok(html.includes("† Co-first author") && html.includes("✉ Corresponding author"));
+for (const role of ["Co-first author", "Corresponding author"]) {
+  const field = role === "Co-first author" ? "co_first_authors" : "corresponding_authors";
+  assert.equal([...html.matchAll(new RegExp(`title="${role}"`, "g"))].length,
+    site.publications.reduce((count, paper) => count + paper[field].length, 0));
+}
+for (const slug of ["worldlines", "world-action-agent", "videomemory"]) {
+  assert.deepEqual(site.publications.find(p => p.slug === slug).corresponding_authors, ["Ying-Cong Chen"],
+    "Project leaders must not be marked as corresponding authors.");
+}
 assert.deepEqual(
   [...html.matchAll(/class="paper-venue">([^<]+)</g)].map(match => match[1]),
-  ["Preprint, 2026", "EMNLP 2026", "ICASSP 2026", "Preprint, 2026", "EMNLP 2025", "BDAI 2023"],
+  ["Preprint, 2026", "Preprint, 2026", "EMNLP 2026", "ICASSP 2026", "Preprint, 2026", "EMNLP 2025", "BDAI 2023"],
   "Use concise venue labels, including WorldLines at EMNLP 2026.",
 );
 const worldlines = site.publications.find(paper => paper.slug === "worldlines");
 assert.equal(worldlines.category, "conferences");
-assert.match(worldlines.bibtex, /^@inproceedings\{/);
-assert.ok(worldlines.bibtex.includes("(EMNLP)"));
+assert.equal(worldlines.display_venue, "EMNLP 2026");
+assert.match(worldlines.bibtex, /^@misc\{zhang2026worldlinesbenchmarkingmodelinglonghorizon,/);
 assert.ok(
   !html.includes("{%") && !/\{\{\s*(site|paper|page)\./.test(html),
   "All Liquid markup must be rendered.",
@@ -69,7 +88,6 @@ assert.ok(
 assert.ok(
   html.includes("No entries") || html.includes("First entries coming soon."),
 );
-assert.ok(html.includes("Y. Zhang</strong>"));
 assert.ok(html.includes("Yehang Zhang</strong>"));
 assert.ok(!/data-open-paper|paper-summary|paper-area|data-filter="(agents|embodied|multimodal)"/.test(html));
 const htmlIds = [...html.matchAll(/\bid="([^"]+)"/g)].map((match) => match[1]);
@@ -85,7 +103,7 @@ assert.ok(
   "Keep the initial UI bundle under 15 KB compressed.",
 );
 console.log(
-  `PASS: biography, six papers, five district mappings, template removal, unique IDs, anchors, build.`,
+  `PASS: biography, seven papers, exact user-provided citations, five district mappings, template removal, unique IDs, anchors, build.`,
 );
 console.log(
   `Initial UI JavaScript: ${(mainBytes / 1024).toFixed(1)} KB gzip. Three.js loads separately on demand (${chunks.filter((f) => f.endsWith(".js")).length} chunk files).`,

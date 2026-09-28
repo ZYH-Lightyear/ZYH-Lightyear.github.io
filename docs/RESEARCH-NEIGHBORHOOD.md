@@ -53,7 +53,7 @@ links are shown in these windows. Close with × or Escape; keyboard focus return
 the opener. Opening animations respect reduced-motion preferences.
 Use the light switch for evening, pause for stillness, and reset to restore the camera.
 Camera and scene updates stop offscreen / in background tabs. Reduced-motion preferences
-start the world paused. Academic view hides the world, shows all six listed papers, and
+start the world paused. Academic view hides the world, shows all seven listed papers, and
 persists locally. No CDN or external font requests are needed for the page or scene.
 
 ## Where to maintain content
@@ -61,7 +61,7 @@ persists locally. No CDN or external font requests are needed for the page or sc
 - `_config.yml`: public email, Scholar, GitHub, site metadata.
 - `_pages/about.md`: existing biography source; the new homepage uses the composed
   biography in `_layouts/research-home.html`. Keep them consistent when updating it.
-- `_publications/*.md`: the canonical seven existing publications, with added `slug`,
+- `_publications/*.md`: the publication records, with added `slug`,
   `short_title`, `research_area`, `selected`, `display_venue`, `authors`, and `bibtex`.
   `bibtex` is a YAML multiline string used by the Cite dialog. Summaries are not displayed.
 - `_data/studio.yml`: district text, paper mappings, notebook names. Fill a district's
@@ -84,13 +84,19 @@ The publishing source remains `master`; no repository Pages settings were change
 
 ## Content boundaries
 
-The original paper titles, venues, links, and citations are retained; this redesign
-does not claim to reverify publication status or add new papers. IEEE Access PCSA is
-excluded as requested. DALFNet is retained in source with `published: false` and
-excluded from the site. All papers is the default clean text list with six papers.
+Publication details and BibTeX follow the user's supplied records. World Action Agent
+was added as a preprint; its September 24, 2026 submission date is from its arXiv page.
+IEEE Access PCSA is excluded as requested. DALFNet is retained in source with
+`published: false` and excluded from the site. All papers is the default clean text
+list with seven papers.
 Selected contains only Orchestrating Audio, VideoMemory, and WorldLines with thumbnails.
 No topic filters or overview dialogs are displayed. District windows do not filter
 or jump to papers. Cite opens copyable BibTeX, not a prose citation.
+WorldLines displays EMNLP 2026 as requested, while its Cite entry retains the
+user-specified arXiv `@misc` record. Original citation keys, field values, author
+order, and optional fields are preserved; pasted Markdown URL wrappers are removed.
+`scripts/fixtures/approved-citations.json` holds the supplied citations for regression
+checks; both data tests and browser clipboard tests compare all seven entries exactly.
 The three selected papers' full author names were checked against ACL/arXiv.
 Paper-card illustrations are conceptual graphics, not reproduced paper figures.
 The profile keeps the first-year PhD, Ying-Cong Chen (PhD and MPhil), and Knowin AI
