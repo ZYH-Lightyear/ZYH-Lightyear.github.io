@@ -359,6 +359,7 @@ async function loadWorld() {
     world = createWorld({
       host: $("#world-canvas"),
       labels: $("#world-labels"),
+      compass: $("#world-compass"),
       districts: studio.districts,
       onSelect: selectDistrict,
       onBook: () => selectDistrict("notes"),

@@ -375,7 +375,7 @@ svg.icon {
   height: 100%;
   display: block;
   cursor: grab;
-  touch-action: pan-y !important;
+  touch-action: none;
 }
 .world-canvas canvas:active {
   cursor: grabbing;
@@ -481,6 +481,7 @@ svg.icon {
   color: #a8b09f;
 }
 .world-compass {
+  --north-angle: 0rad;
   position: absolute;
   right: 29px;
   bottom: 18px;
@@ -490,11 +491,22 @@ svg.icon {
   font-size: 8px;
   font-family: var(--mono);
   color: #86927c;
+  pointer-events: none;
+}
+.compass-dial {
+  position: relative;
+  display: flex;
+  transform: rotate(var(--north-angle));
+}
+.compass-dial > span {
+  position: absolute;
+  left: 50%;
+  top: -10px;
+  transform: translateX(-50%) rotate(calc(-1 * var(--north-angle)));
 }
 .world-compass svg {
   width: 37px;
   height: 37px;
-  transform: rotate(-35deg);
 }
 .world-frame.evening {
   background: #292f36;

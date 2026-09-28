@@ -6,6 +6,7 @@ import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.j
 export function createWorld({
   host,
   labels,
+  compass,
   districts,
   onSelect,
   onBook,
@@ -36,8 +37,10 @@ export function createWorld({
   controls.enableDamping = true;
   controls.dampingFactor = 0.065;
   controls.enablePan = false;
-  // Wheel scroll belongs to the document; zoom is available by pinch / explicit controls.
-  controls.enableZoom = false;
+  // OrbitControls owns wheel and pinch zoom; keep buttons within the same limits.
+  controls.enableZoom = true;
+  controls.minZoom = 0.8;
+  controls.maxZoom = 1.7;
   controls.minPolarAngle = 0.38;
   controls.maxPolarAngle = 1.18;
   controls.update();
@@ -709,11 +712,12 @@ export function createWorld({
   let disposed = false,
     inRender = false;
   const project = new THREE.Vector3();
+  const north = new THREE.Vector3();
+  const inverseCameraRotation = new THREE.Quaternion();
   const pointer = new THREE.Vector2();
   const raycaster = new THREE.Raycaster();
   let down = null;
   const activePointers = new Map();
-  let pinchDistance = null;
   const dom = renderer.domElement;
   const viewportResize = new ResizeObserver(() => {
     width = host.clientWidth;
@@ -748,6 +752,14 @@ export function createWorld({
       button.hidden =
         project.z > 1 || x < 15 || x > width - 15 || y < 10 || y > height - 10;
     }
+  }
+  function updateCompass() {
+    // World north is -Z. Project its direction into the camera's screen plane,
+    // so the needle agrees with the board at every azimuth and elevation.
+    inverseCameraRotation.copy(camera.quaternion).invert();
+    north.set(0, 0, -1).applyQuaternion(inverseCameraRotation);
+    const angle = Math.atan2(north.x, north.y);
+    compass.style.setProperty("--north-angle", `${angle}rad`);
   }
   function render(time) {
     frame = 0;
@@ -799,6 +811,7 @@ export function createWorld({
           ? 0.32
           : 0.3 + Math.sin(animationTime * 1.7) * 0.1;
       updateLabels();
+      updateCompass();
       renderer.render(scene, camera);
       needsRender = false;
     }
@@ -826,34 +839,18 @@ export function createWorld({
   function pointerDown(e) {
     activePointers.set(e.pointerId, new THREE.Vector2(e.clientX, e.clientY));
     down = { x: e.clientX, y: e.clientY, multi: activePointers.size > 1 };
-    if (activePointers.size === 2) {
-      const [a, b] = [...activePointers.values()];
-      pinchDistance = a.distanceTo(b);
-    }
   }
   function pointerMove(e) {
     if (activePointers.has(e.pointerId))
       activePointers.set(e.pointerId, new THREE.Vector2(e.clientX, e.clientY));
     if (activePointers.size === 2) {
-      const [a, b] = [...activePointers.values()];
-      const distance = a.distanceTo(b);
-      if (pinchDistance)
-        camera.zoom = THREE.MathUtils.clamp(
-          (camera.zoom * distance) / pinchDistance,
-          0.8,
-          1.6,
-        );
-      pinchDistance = distance;
-      camera.updateProjectionMatrix();
       if (down) down.multi = true;
-      requestRender();
     } else if (e.pointerType === "mouse" && !activePointers.size) {
       dom.style.cursor = hit(e) ? "pointer" : "grab";
     }
   }
   function pointerUp(e) {
     activePointers.delete(e.pointerId);
-    pinchDistance = null;
     if (
       !down ||
       down.multi ||
@@ -877,7 +874,6 @@ export function createWorld({
   }
   function pointerCancel(e) {
     activePointers.delete(e.pointerId);
-    pinchDistance = null;
     down = null;
   }
   dom.addEventListener("pointerdown", pointerDown);
@@ -956,7 +952,11 @@ export function createWorld({
       requestRender();
     },
     zoom(delta) {
-      camera.zoom = THREE.MathUtils.clamp(camera.zoom + delta, 0.8, 1.7);
+      camera.zoom = THREE.MathUtils.clamp(
+        camera.zoom + delta,
+        controls.minZoom,
+        controls.maxZoom,
+      );
       camera.updateProjectionMatrix();
       requestRender();
     },

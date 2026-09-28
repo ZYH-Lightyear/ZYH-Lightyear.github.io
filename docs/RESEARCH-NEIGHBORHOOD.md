@@ -45,7 +45,10 @@ to the same material, loaded separately only when the neighborhood comes into vi
 | The Reading Room | Lamp, chair, three pickable books             | Small notebook selector, then notebook contents |
 | The Photo Wall   | A small freestanding exhibition wall          | Small photo preview, then full Photos section   |
 
-Drag to orbit, pinch or use +/− to zoom, click a building/label to select a district.
+Drag to orbit, scroll/pinch or use +/− to zoom (0.8–1.7×), click a building/label to select a district.
+Scroll over the 3D canvas to zoom; scroll outside it to move down the page.
+The compass projects world north (−Z) into the current camera view and updates during
+orbiting, including in paused/reduced-motion mode. Reset restores both view and compass.
 Buildings, labels, books, and picture frames open a small non-modal window inside
 the workspace. Photo previews require a second click to visit the full Photos section;
 notebook previews require a second click to open a notebook. No research-paper jump

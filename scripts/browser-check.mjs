@@ -34,6 +34,16 @@ async function noOverflow(page) {
     "Horizontal overflow",
   );
 }
+async function anchorDistance(page) {
+  return page.locator("#world-labels").evaluate(node => {
+    const a = node.querySelector('[data-district="agents"]').style;
+    const b = node.querySelector('[data-district="embodied"]').style;
+    return Math.hypot(parseFloat(a.left) - parseFloat(b.left), parseFloat(a.top) - parseFloat(b.top));
+  });
+}
+async function compassAngle(page) {
+  return page.locator("#world-compass").evaluate(node => parseFloat(node.style.getPropertyValue("--north-angle")));
+}
 try {
   const { page, context } = await pageFor({
     viewport: { width: 1440, height: 1050 },
@@ -242,6 +252,32 @@ try {
   await page.locator("#light-toggle").click();
   await page.locator("#zoom-in").click();
   await page.locator("#reset-view").click();
+  await page.waitForTimeout(100);
+  const initialNorth = await compassAngle(page);
+  const initialDistance = await anchorDistance(page);
+  const zoomBounds = await page.locator("canvas").boundingBox();
+  await page.mouse.move(zoomBounds.x + zoomBounds.width * 0.12, zoomBounds.y + zoomBounds.height * 0.4);
+  const scrollBeforeZoom = await page.evaluate(() => scrollY);
+  await page.mouse.wheel(0, -600);
+  await page.waitForTimeout(150);
+  assert.ok(await anchorDistance(page) > initialDistance * 1.1, "Wheel up zooms into the actual scene");
+  assert.equal(await page.evaluate(() => scrollY), scrollBeforeZoom, "Canvas wheel must not scroll the page");
+  assert.ok(Math.abs(await compassAngle(page) - initialNorth) < 0.001, "Zoom does not change north");
+  await page.mouse.wheel(0, 600);
+  await page.waitForTimeout(150);
+  assert.ok(Math.abs(await anchorDistance(page) / initialDistance - 1) < 0.01, "Wheel down reverses zoom");
+  for (let i = 0; i < 12; i++) await page.mouse.wheel(0, -600);
+  await page.waitForTimeout(150);
+  assert.ok(Math.abs(await anchorDistance(page) / initialDistance - 1.7) < 0.01, "Wheel respects maximum zoom");
+  for (let i = 0; i < 12; i++) await page.mouse.wheel(0, 600);
+  await page.waitForTimeout(150);
+  assert.ok(Math.abs(await anchorDistance(page) / initialDistance - 0.8) < 0.01, "Wheel respects minimum zoom");
+  await page.mouse.move(8, 400);
+  await page.mouse.wheel(0, 200);
+  await page.waitForTimeout(150);
+  assert.ok(await page.evaluate(() => scrollY) > scrollBeforeZoom, "Wheel outside canvas still scrolls the page");
+  await page.locator("#reset-view").click();
+  await page.locator("#world-frame").scrollIntoViewIfNeeded();
   const before = await page.locator("canvas").screenshot();
   const bounds = await page.locator("canvas").boundingBox();
   await page.mouse.move(
@@ -258,9 +294,14 @@ try {
   await page.waitForTimeout(350);
   const after = await page.locator("canvas").screenshot();
   assert.notDeepEqual(before, after, "Dragging must rotate actual geometry");
+  assert.ok(Math.abs(await compassAngle(page) - initialNorth) > 0.1, "Compass follows the orbit even with animation paused");
+  await page.locator("#world-frame").screenshot({ path: path.join(screenshots, "world-rotated-compass.png") });
+  await page.waitForTimeout(1500);
   await page.locator("#reset-view").click();
+  await page.waitForTimeout(150);
+  assert.ok(Math.abs(await compassAngle(page) - initialNorth) < 0.01, "Reset restores north");
   report(
-    "persisted academic mode, lazy WebGL loading, day/night, zoom/reset, actual orbit controls",
+    "academic mode, day/night, bounded wheel zoom, outside page scrolling, dynamic compass and reset",
   );
   await context.close();
 
@@ -277,6 +318,27 @@ try {
     () => document.querySelector("#world-fallback").hidden,
   );
   await noOverflow(mobile.page);
+  await mobile.page.locator("#world-frame").scrollIntoViewIfNeeded();
+  const touchBounds = await mobile.page.locator("canvas").boundingBox();
+  const touchX = touchBounds.x + touchBounds.width / 2;
+  const touchY = touchBounds.y + touchBounds.height * 0.7;
+  const touchDistance = await anchorDistance(mobile.page);
+  const touchSession = await mobile.context.newCDPSession(mobile.page);
+  const points = distance => [
+    { x: touchX - distance / 2, y: touchY, id: 1 },
+    { x: touchX + distance / 2, y: touchY, id: 2 },
+  ];
+  await touchSession.send("Input.dispatchTouchEvent", { type: "touchStart", touchPoints: points(70) });
+  for (const distance of [80, 90, 100]) {
+    await touchSession.send("Input.dispatchTouchEvent", { type: "touchMove", touchPoints: points(distance) });
+  }
+  await touchSession.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
+  await mobile.page.waitForTimeout(150);
+  assert.ok(await anchorDistance(mobile.page) > touchDistance * 1.2, "Two-finger pinch zooms the scene");
+  assert.ok(await mobile.page.locator("#workspace-popover").isHidden(), "Pinching must not open a district");
+  await touchSession.detach();
+  await mobile.page.locator("#reset-view").tap();
+  report("mobile two-finger pinch zoom without accidental district selection");
   await mobile.page.locator('[data-filter="selected"]').tap();
   assert.equal(await mobile.page.locator(".paper-art:visible").count(), 3);
   await noOverflow(mobile.page);

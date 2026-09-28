@@ -152,7 +152,7 @@
             id="world-canvas"
             class="world-canvas"
             role="region"
-            aria-label="Interactive 3D research neighborhood. Drag to rotate. Use the district buttons below as a keyboard-accessible alternative."
+            aria-label="Interactive 3D research neighborhood. Drag to rotate, scroll or pinch to zoom. Use the district buttons below as a keyboard-accessible alternative."
           >
             <div class="world-fallback" id="world-fallback">
               <svg class="icon"><use href="#i-cube" /></svg>
@@ -170,20 +170,22 @@
           </div>
           <div class="world-corner">
             <span class="canvas-help"
-              >Drag to orbit <span>·</span> Pinch to zoom <span>·</span> Click
+              >Drag to orbit <span>·</span> Scroll / pinch to zoom <span>·</span> Click
               to discover</span
             >
           </div>
-          <div class="world-compass" aria-hidden="true">
-            <span>N</span
-            ><svg viewBox="0 0 40 40">
-              <path d="m20 6 5 15-5-2-5 2Z" fill="currentColor" />
-              <path
-                d="m20 34 5-15-5 2-5-2Z"
-                fill="none"
-                stroke="currentColor"
-              />
-            </svg>
+          <div class="world-compass" id="world-compass" aria-hidden="true">
+            <div class="compass-dial">
+              <span>N</span
+              ><svg viewBox="0 0 40 40">
+                <path d="m20 6 5 15-5-2-5 2Z" fill="currentColor" />
+                <path
+                  d="m20 34 5-15-5 2-5-2Z"
+                  fill="none"
+                  stroke="currentColor"
+                />
+              </svg>
+            </div>
           </div>
           <section
             class="workspace-popover"
