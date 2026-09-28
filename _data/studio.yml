@@ -1,0 +1,61 @@
+name: Research Neighborhood
+edition: "01"
+tagline: A small world of big questions.
+districts:
+  - id: agents
+    number: "01"
+    name: Agents Quarter
+    short: Agents
+    label: COORDINATE · CREATE
+    color: "#6d8977"
+    # Add a personal paragraph about your interest in this area here (YAML | for multiple lines).
+    description: ""
+    papers: [orchestrating-audio, agentic-generative-systems]
+  - id: embodied
+    number: "02"
+    name: Embodied Lab
+    short: Embodied
+    label: REMEMBER · PLAN · ACT
+    color: "#bd704b"
+    description: ""
+    papers: [worldlines, videomemory]
+  - id: workshop
+    number: "03"
+    name: The Workshop
+    short: In progress
+    label: IDEAS UNDER CONSTRUCTION
+    color: "#a28a49"
+    description: ""
+    papers: []
+  - id: notes
+    number: "04"
+    name: The Reading Room
+    short: Field notes
+    label: READ · THINK · REVISIT
+    color: "#698493"
+    description: Notebooks for paper readings, experiment logs, and things learned along the way. The shelves are ready for their first entries.
+    papers: []
+  - id: gallery
+    number: "05"
+    name: The Photo Wall
+    short: Photo journal
+    label: LIFE BETWEEN EXPERIMENTS
+    color: "#ae827d"
+    description: ""
+    papers: []
+notebooks:
+  - id: memory
+    title: On memory
+    subtitle: Agents, context & experience
+    color: sage
+    number: "01"
+  - id: embodied
+    title: Learning to act
+    subtitle: Embodiment & long horizons
+    color: clay
+    number: "02"
+  - id: making
+    title: Working notes
+    subtitle: Experiments & small discoveries
+    color: blue
+    number: "03"

@@ -157,6 +157,13 @@ include:
   - _pages
   - files
 exclude:
+  - package-lock.json
+  - scripts
+  - src
+  - tests
+  - docs
+  - test-results
+  - THIRD_PARTY_NOTICES.md
   - "*.sublime-project"
   - "*.sublime-workspace"
   - .asset-cache
@@ -212,6 +219,12 @@ kramdown:
 
 # These settings control the types of collections used by the template
 collections:
+  notes:
+    output: true
+    permalink: /notes/:path/
+  photo_stories:
+    output: true
+    permalink: /journal/:path/
   teaching:
     output: true
     permalink: /:collection/:path/

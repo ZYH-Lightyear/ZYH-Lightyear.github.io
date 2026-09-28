@@ -1,0 +1,544 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Yehang Zhang — first-year PhD student at HKUST(GZ), researching embodied agents, memory, planning, and multimodal generation. Explore the research neighborhood."
+    />
+    <meta name="theme-color" content="#f6f5ef" />
+    <meta property="og:title" content="Yehang Zhang · Research Neighborhood" />
+    <meta
+      property="og:description"
+      content="Yehang Zhang — personal profile, publications, research, and notes."
+    />
+    <meta
+      property="og:image"
+      content="{{ site.url }}{{ site.baseurl }}/images/avatar.png"
+    />
+    <meta property="og:type" content="website" />
+    <link rel="canonical" href="{{ site.url }}{{ site.baseurl }}/" />
+    <link
+      rel="icon"
+      href="{{ site.baseurl }}/assets/images/studio-mark.svg"
+      type="image/svg+xml"
+    />
+    <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/home.css" />
+    <title>Yehang Zhang · Research Neighborhood</title>
+  </head>
+  <body>
+    {% include studio-icons.html %}
+    <a class="skip-link" href="#about">Skip to content</a>
+    <header class="masthead">
+      <a
+        href="{{ site.baseurl }}/"
+        class="brand"
+        aria-label="Yehang Zhang, home"
+        ><span class="brand-mark">yz<span>✳</span></span
+        ><span>YEHANG ZHANG</span></a
+      >
+      <nav aria-label="Main navigation">
+        <a href="#about">About</a><a href="#publications">Research</a
+        ><a href="#notes">Field notes</a><a href="#gallery">Life</a>
+      </nav>
+      <button class="view-toggle" id="academic-toggle" aria-pressed="false">
+        <svg class="icon"><use href="#i-list" /></svg><span>Academic view</span>
+      </button>
+    </header>
+    <main id="main" class="page-shell">
+      <section id="about" class="hero" aria-labelledby="hero-title">
+        <div class="hero-intro">
+          <h1 id="hero-title">Yehang Zhang</h1>
+          <p class="hero-caption">PhD Student · HKUST(GZ)</p>
+        </div>
+        <div class="profile-intro">
+          <div class="profile-heading">
+            <img
+              src="{{ site.baseurl }}/images/avatar.png"
+              width="60"
+              height="60"
+              alt="Portrait of Yehang Zhang"
+            />
+            <div>
+              <h2>About me</h2>
+              <p>First-year PhD student · HKUST(GZ)</p>
+            </div>
+          </div>
+          <p>
+            I am a first-year PhD student in Artificial Intelligence at the
+            <a href="https://www.hkust-gz.edu.cn/" target="_blank" rel="noopener noreferrer">Hong Kong University of Science and Technology (Guangzhou)</a>.
+            I am fortunate to be supervised by
+            <a
+              href="https://www.yingcong.me/"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Professor Ying-Cong Chen</a
+            >. I am also a Research Intern at
+            <a
+              href="https://www.knowinai.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Knowin AI</a
+            >. My research interests include embodied agents, long-horizon
+            agent memory and planning, multimodal learning, and generative AI.
+          </p>
+          <div class="profile-links">
+            <a
+              href="{{ site.author.googlescholar }}"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Google Scholar
+              <svg class="icon"><use href="#i-external" /></svg></a
+            ><a
+              href="https://github.com/{{ site.author.github }}"
+              target="_blank"
+              rel="noopener noreferrer"
+              >GitHub <svg class="icon"><use href="#i-external" /></svg></a
+            ><a href="mailto:{{ site.author.email }}"
+              >Email <svg class="icon"><use href="#i-external" /></svg
+            ></a>
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="neighborhood"
+        class="world-section"
+        aria-labelledby="world-title"
+      >
+        <div class="world-frame" id="world-frame">
+          <div class="world-heading">
+            <h2 id="world-title">Research workspace</h2>
+            <p>Select an area to take a look inside.</p>
+          </div>
+          <div class="world-tools" aria-label="World controls">
+            <button
+              id="light-toggle"
+              aria-label="Switch to evening lighting"
+              aria-pressed="false"
+              title="Change lighting"
+            >
+              <svg class="icon"><use href="#i-sun" /></svg
+              ><span>Daylight</span></button
+            ><button
+              id="motion-toggle"
+              aria-label="Pause world animation"
+              aria-pressed="false"
+              title="Pause animation"
+            >
+              <span id="motion-symbol" aria-hidden="true">Ⅱ</span></button
+            ><button
+              id="zoom-in"
+              aria-label="Zoom into the world"
+              title="Zoom in"
+            >
+              +</button
+            ><button
+              id="zoom-out"
+              aria-label="Zoom out of the world"
+              title="Zoom out"
+            >
+              −</button
+            ><button
+              id="reset-view"
+              aria-label="Reset camera view"
+              title="Reset view"
+            >
+              <svg class="icon"><use href="#i-reset" /></svg>
+            </button>
+          </div>
+          <div
+            id="world-canvas"
+            class="world-canvas"
+            role="region"
+            aria-label="Interactive 3D research neighborhood. Drag to rotate. Use the district buttons below as a keyboard-accessible alternative."
+          >
+            <div class="world-fallback" id="world-fallback">
+              <svg class="icon"><use href="#i-cube" /></svg>
+              <p>Your research neighborhood</p>
+              <span>Choose a district below to explore.</span
+              ><button id="load-world" class="small-link">
+                Enter the 3D world <span aria-hidden="true">↗</span>
+              </button>
+            </div>
+            <div
+              id="world-labels"
+              class="world-labels"
+              aria-label="District locations"
+            ></div>
+          </div>
+          <div class="world-corner">
+            <span class="canvas-help"
+              >Drag to orbit <span>·</span> Pinch to zoom <span>·</span> Click
+              to discover</span
+            >
+          </div>
+          <div class="world-compass" aria-hidden="true">
+            <span>N</span
+            ><svg viewBox="0 0 40 40">
+              <path d="m20 6 5 15-5-2-5 2Z" fill="currentColor" />
+              <path
+                d="m20 34 5-15-5 2-5-2Z"
+                fill="none"
+                stroke="currentColor"
+              />
+            </svg>
+          </div>
+          <section
+            class="workspace-popover"
+            id="workspace-popover"
+            role="dialog"
+            aria-modal="false"
+            aria-labelledby="district-title"
+            hidden
+          >
+            <div class="workspace-popover-heading">
+              <h3 id="district-title"></h3>
+              <button id="close-workspace-popover" class="icon-button" aria-label="Close workspace window">
+                <svg class="icon"><use href="#i-close" /></svg>
+              </button>
+            </div>
+            <p class="workspace-note" id="district-description"></p>
+            <div id="workspace-preview"></div>
+          </section>
+        </div>
+        <div
+          class="district-tabs"
+          role="group"
+          aria-label="Choose a research district"
+        >
+          {% for district in site.data.studio.districts %}
+          <button
+            class="district-tab"
+            data-district="{{ district.id }}"
+            aria-pressed="false"
+            aria-expanded="false"
+            aria-controls="workspace-popover"
+          >
+            <span class="district-number">{{ district.number }}</span
+            ><svg class="icon">
+              <use
+                href="#i-{% case district.id %}{% when 'embodied' %}robot{% when 'workshop' %}work{% when 'notes' %}book{% when 'gallery' %}photo{% else %}agents{% endcase %}"
+              /></svg
+            ><span>{{ district.short }}</span
+            ><span class="tab-arrow" aria-hidden="true">↗</span>
+          </button>
+          {% endfor %}
+        </div>
+        <noscript
+          ><p class="notice">
+            The full academic profile and papers are available below. Enable
+            JavaScript to explore the 3D world and notebook previews.
+          </p></noscript
+        >
+      </section>
+
+      <section
+        id="publications"
+        class="content-section research-section"
+        aria-labelledby="publications-title"
+      >
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">01 / RESEARCH</p>
+            <h2 id="publications-title">Publications</h2>
+          </div>
+          <a
+            class="text-link"
+            href="{{ site.author.googlescholar }}"
+            target="_blank"
+            rel="noopener noreferrer"
+            >All work on Scholar
+            <svg class="icon"><use href="#i-external" /></svg
+          ></a>
+        </div>
+        <div class="research-toolbar">
+          <div
+            class="pub-button-container"
+            role="group"
+            aria-label="Filter publications"
+          >
+            <button
+              class="pub-button active"
+              data-filter="all"
+              aria-pressed="true"
+            >
+              All papers</button
+            ><button class="pub-button" data-filter="selected" aria-pressed="false">
+              Selected
+            </button>
+          </div>
+          <span class="research-count" id="research-count" aria-live="polite"
+            >{{ site.publications.size }} papers</span
+          >
+        </div>
+        <div
+          class="publication-view"
+          data-publication-view="core"
+          id="paper-list"
+        >
+          {% assign publications = site.publications | sort: 'date' | reverse %}
+          {% for paper in publications %}
+          <article
+            class="publication-card"
+            id="paper-{{ paper.slug }}"
+            data-paper="{{ paper.slug }}"
+            data-selected="{{ paper.selected }}"
+          >
+            {% if paper.selected %}
+            <a
+              class="paper-art art-{{ paper.slug }}"
+              href="{{ paper.paperurl }}"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Read {{ paper.short_title }}"
+            >
+              <span class="art-grid" aria-hidden="true"></span
+              ><span class="art-diagram" aria-hidden="true"
+                ><i></i><i></i><i></i><i></i><i></i></span
+              ><span class="art-name">{{ paper.short_title }}</span>
+            </a>
+            {% endif %}
+            <div class="paper-copy">
+              <h3>
+                <a
+                  href="{{ paper.paperurl }}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >{{ paper.title }}</a
+                >
+              </h3>
+              <!-- prettier-ignore -->
+              <p class="pub-list-authors">{{ paper.authors | escape | replace: 'Y. Zhang', '<strong>Y. Zhang</strong>' | replace: 'Yehang Zhang', '<strong>Yehang Zhang</strong>' }}</p>
+              <p class="paper-venue">{{ paper.display_venue }}</p>
+              <div class="paper-links">
+                <a
+                  href="{{ paper.paperurl }}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >[paper]</a
+                ><button data-cite="{{ paper.slug }}" aria-label="Cite {{ paper.short_title }}">
+                  [cite]
+                </button>
+              </div>
+            </div>
+            <template id="data-{{ paper.slug }}"
+              ><h2>{{ paper.title }}</h2>
+              <div class="citation-block">
+                <pre class="citation-text" tabindex="0" aria-label="BibTeX citation"><code>{{ paper.bibtex | escape }}</code></pre>
+                <button class="copy-citation button-primary">Copy BibTeX</button>
+              </div></template
+            >
+          </article>
+          {% endfor %}
+        </div>
+        <p class="filter-note" id="filter-note" hidden>
+          No papers selected.
+        </p>
+      </section>
+
+      <section
+        class="content-section experience-section"
+        id="experience"
+        aria-labelledby="experience-title"
+      >
+        <div class="section-heading">
+          <div>
+            <h2 id="experience-title">Education &amp; Experience</h2>
+          </div>
+        </div>
+        <ul class="resume-list">
+          <li class="resume-row">
+              <h3>Research Intern <span class="resume-dash">—</span>
+              <a
+                href="https://www.knowinai.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Knowin AI</a></h3>
+              <span class="resume-date">(2026 — Present)</span>
+          </li>
+          <li class="resume-row">
+              <h3>PhD in Artificial Intelligence <span class="resume-dash">—</span>
+              <a
+                href="https://www.hkust-gz.edu.cn/"
+                target="_blank"
+                rel="noopener noreferrer"
+                >HKUST (Guangzhou)</a></h3>
+              <span class="resume-date">(2026 — Present)</span>
+              <p class="resume-detail">
+                First-year PhD student · Supervised by
+                <a
+                  href="https://www.yingcong.me/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >Prof. Ying-Cong Chen</a
+                >.
+              </p>
+          </li>
+          <li class="resume-row">
+              <h3>MPhil in Artificial Intelligence <span class="resume-dash">—</span>
+                <a href="https://www.hkust-gz.edu.cn/" target="_blank" rel="noopener noreferrer">HKUST (Guangzhou)</a>
+              </h3>
+              <span class="resume-date">(September 2024 — June 2026)</span>
+              <p class="resume-detail">Supervised by
+              <a
+                href="https://www.yingcong.me/"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Prof. Ying-Cong Chen</a
+              >
+              </p>
+          </li>
+          <li class="resume-row">
+              <h3>BEng in Computer Science and Technology <span class="resume-dash">—</span>
+                <em>China University of Geosciences (Wuhan)</em>
+              </h3>
+              <span class="resume-date">(September 2019 — June 2023)</span>
+          </li>
+        </ul>
+      </section>
+
+      <section
+        class="content-section notes-section"
+        id="notes"
+        aria-labelledby="notes-title"
+      >
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">03 / THE READING ROOM</p>
+            <h2 id="notes-title">Notes</h2>
+          </div>
+        </div>
+        <div class="bookshelf">
+          {% for notebook in site.data.studio.notebooks %}<button
+            class="notebook book-{{ notebook.color }}"
+            data-notebook="{{ notebook.id }}"
+          >
+            <span class="book-binding"></span
+            ><span class="eyebrow">FIELD NOTES / {{ notebook.number }}</span
+            ><span class="book-title">{{ notebook.title }}</span
+            ><span class="book-illustration" aria-hidden="true"
+              >{% case notebook.id %}{% when 'memory' %}◎{% when 'embodied'
+              %}↗{% else %}✳{% endcase %}</span
+            ><span class="book-bottom"
+              >{{ notebook.subtitle }}<span>Open notebook ↗</span></span
+            ></button
+          >{% endfor %}
+        </div>
+        {% assign published_notes = site.notes | where_exp: 'note',
+        'note.published != false' %} {% if published_notes.size > 0 %}
+        <div class="entry-list">
+          {% for note in published_notes %}<a
+            href="{{ site.baseurl }}{{ note.url }}"
+            >{{ note.title }} <span>Read note ↗</span></a
+          >{% endfor %}
+        </div>
+        {% else %}
+        <p class="empty-caption">
+          <span class="status-dot muted"></span> The notebooks are set out.
+          First entries coming soon.
+        </p>
+        {% endif %}
+      </section>
+
+      <section
+        class="content-section gallery-section"
+        id="gallery"
+        aria-labelledby="gallery-title"
+      >
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">04 / OUTSIDE THE LAB</p>
+            <h2 id="gallery-title">Photos</h2>
+          </div>
+        </div>
+        <div class="photo-wall">
+          <button class="photo-card" data-photo="riverside" data-photo-title="2023 · The Bund, Shanghai" aria-label="View 2023 photograph at the Bund, Shanghai">
+            <span class="photo-image"
+              ><img
+                src="{{ site.baseurl }}/assets/images/riverside-night.jpg"
+                alt="Yehang Zhang by the river at night, with illuminated buildings behind him"
+                width="1280"
+                height="960"
+                loading="lazy" /></span
+            ><span class="photo-caption"
+              >2023 · The Bund, Shanghai <span>01 ↗</span></span>
+          </button>
+          <button class="photo-card" data-photo="aircraft" data-photo-title="2024 · Zhuhai Airshow" aria-label="View 2024 Zhuhai Airshow photograph">
+            <span class="photo-image"><img
+              src="{{ site.baseurl }}/assets/images/aircraft-formation.jpg"
+              alt="Three aircraft flying in formation against an overcast sky"
+              width="1279"
+              height="1645"
+              loading="lazy" /></span>
+            <span class="photo-caption">2024 · Zhuhai Airshow <span>02 ↗</span></span>
+          </button>
+          <div class="gallery-note">
+            <span class="handwritten">Photo journal</span>
+            <p>
+              A wall for campus walks, places explored, and the everyday in
+              between.
+            </p>
+            <span class="little-star" aria-hidden="true">✳</span>
+          </div>
+        </div>
+        {% assign stories = site.photo_stories | where_exp: 'story',
+        'story.published != false' %}{% if stories.size > 0 %}
+        <div class="entry-list">
+          {% for story in stories %}<a href="{{ site.baseurl }}{{ story.url }}"
+            >{{ story.title }} <span>Open photo story ↗</span></a
+          >{% endfor %}
+        </div>
+        {% endif %}
+      </section>
+
+      <section id="contact" class="contact-section">
+        <div>
+          <h2>Contact</h2>
+        </div>
+        <a href="mailto:{{ site.author.email }}" class="contact-link"
+          >Email <svg class="icon"><use href="#i-external" /></svg
+          ><span>{{ site.author.email }}</span></a
+        >
+      </section>
+    </main>
+    <footer class="site-footer">
+      <span>© {{ 'now' | date: '%Y' }} Yehang Zhang</span
+      ><span
+        >Built on
+        <a
+          href="https://github.com/WD7ang/WowPage"
+          target="_blank"
+          rel="noopener noreferrer"
+          >WowPage</a
+        >
+        & Three.js.</span
+      ><a href="#about">Back to top ↑</a>
+    </footer>
+    <dialog id="content-dialog" aria-labelledby="dialog-title">
+      <div class="dialog-top">
+        <span class="eyebrow" id="dialog-kind">FROM THE NEIGHBORHOOD</span
+        ><button
+          id="close-dialog"
+          class="icon-button"
+          aria-label="Close dialog"
+        >
+          <svg class="icon"><use href="#i-close" /></svg>
+        </button>
+      </div>
+      <div id="dialog-content"></div>
+    </dialog>
+    <div id="toast" role="status" aria-live="polite"></div>
+    <script type="application/json" id="studio-data">
+      {{ site.data.studio | jsonify }}
+    </script>
+    <script type="application/json" id="notebook-entries">
+      [{% for note in published_notes %}{"title":{{ note.title | jsonify }},"notebook":{{ note.notebook | jsonify }},"url":{{ note.url | prepend: site.baseurl | jsonify }}}{% unless forloop.last %},{% endunless %}{% endfor %}]
+    </script>
+    <script
+      type="module"
+      src="{{ site.baseurl }}/assets/js/studio/main.js"
+    ></script>
+  </body>
+</html>

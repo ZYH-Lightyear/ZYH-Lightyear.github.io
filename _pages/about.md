@@ -1,7 +1,8 @@
 ---
 permalink: /
-title: "Short Bio"
-author_profile: true
+title: "Yehang Zhang — Research Neighborhood"
+layout: research-home
+author_profile: false
 redirect_from: 
   - /about/
   - /about.html

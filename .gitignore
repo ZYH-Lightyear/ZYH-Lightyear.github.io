@@ -10,4 +10,7 @@ Gemfile.lock
 
 # Ingore files created by npm
 node_modules
-package-lock.json
+_preview/
+test-results/
+# Compiled studio assets are committed for GitHub Pages' branch-based Jekyll build.
+.DS_Store
