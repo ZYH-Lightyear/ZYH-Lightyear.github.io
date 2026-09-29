@@ -60,6 +60,8 @@ assert.ok(html.includes(`<meta property="og:title" content="${homePage.title}"`)
 assert.ok(html.includes(`rel="canonical" href="${site.url}${site.baseurl}/"`));
 assert.ok(!/Lighthearted Homepage|Short Bio|<title>.*Research Neighborhood/.test(html));
 assert.equal(homePage.sitemap, true);
+assert.ok(site.plugins.includes("jekyll-redirect-from"), "Keep the old /about/ and /about.html links working.");
+assert.deepEqual(homePage.redirect_from, ["/about/", "/about.html"]);
 assert.equal(site.future, false);
 assert.equal(site.atom_feed.hide, true);
 assert.ok(!site.plugins.includes("jekyll-feed"));
