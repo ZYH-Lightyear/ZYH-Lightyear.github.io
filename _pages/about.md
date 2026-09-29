@@ -1,6 +1,8 @@
 ---
 permalink: /
-title: "Yehang Zhang — Research Neighborhood"
+title: "Yehang Zhang | HKUST (Guangzhou)"
+sitemap: true
+last_modified_at: 2026-09-29
 layout: research-home
 author_profile: false
 redirect_from: 

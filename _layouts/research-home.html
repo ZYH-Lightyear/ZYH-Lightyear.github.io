@@ -5,13 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Yehang Zhang — first-year PhD student at HKUST(GZ), researching embodied agents, memory, planning, and multimodal generation. Explore the research neighborhood."
+      content="Yehang Zhang, first-year PhD student at HKUST (Guangzhou) and Research Intern at Knowin AI. Research in embodied agents, memory, planning, and multimodal generation."
     />
     <meta name="theme-color" content="#f6f5ef" />
-    <meta property="og:title" content="Yehang Zhang · Research Neighborhood" />
+    <meta property="og:title" content="{{ page.title | escape }}" />
+    <meta property="og:site_name" content="Yehang Zhang" />
+    <meta property="og:url" content="{{ site.url }}{{ site.baseurl }}/" />
     <meta
       property="og:description"
-      content="Yehang Zhang — personal profile, publications, research, and notes."
+      content="Yehang Zhang — PhD student at HKUST (Guangzhou), Research Intern at Knowin AI. Publications, research, and learning notes."
     />
     <meta
       property="og:image"
@@ -25,7 +27,7 @@
       type="image/svg+xml"
     />
     <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/home.css" />
-    <title>Yehang Zhang · Research Neighborhood</title>
+    <title>{{ page.title | escape }}</title>
   </head>
   <body>
     {% include studio-icons.html %}

@@ -87,7 +87,7 @@ publication_category:
 teaser                   :  # filename of teaser fallback teaser image placed in /images/, .e.g. "500x300.png"
 breadcrumbs              : false # true, false (default)
 words_per_minute         : 160
-future                   : true
+future                   : false
 read_more                : "disabled" # if enabled, adds "Read more" links to excerpts
 talkmap_link             : false #change to true to add link to talkmap on talks page
 comments:
@@ -117,7 +117,7 @@ staticman:
       options:
         format           : "iso8601" # "iso8601" (default), "timestamp-seconds", "timestamp-milliseconds"
 atom_feed:
-  hide                   : false     # change to true to hide the RSS feed in the footer
+  hide                   : true      # No public blog feed; do not link to template posts.
   path                   : # blank (default) uses feed.xml
 
 
@@ -157,6 +157,38 @@ include:
   - _pages
   - files
 exclude:
+  # Retain template sources in Git, but never publish sample content or tools.
+  - _posts
+  - _portfolio
+  - _talks
+  - _teaching
+  - _notes/README.md
+  - _photo_stories/README.md
+  - _pages/archive-layout-with-content.md
+  - _pages/category-archive.html
+  - _pages/collection-archive.html
+  - _pages/cv.md
+  - _pages/markdown.md
+  - _pages/non-menu-page.md
+  - _pages/page-archive.html
+  - _pages/portfolio.html
+  - _pages/tag-archive.html
+  - _pages/talkmap.html
+  - _pages/talks.html
+  - _pages/teaching.html
+  - _pages/terms.md
+  - _pages/year-archive.html
+  - files/paper1.pdf
+  - files/paper2.pdf
+  - files/paper3.pdf
+  - files/slides1.pdf
+  - files/slides2.pdf
+  - files/slides3.pdf
+  - markdown_generator
+  - talkmap
+  - talkmap.py
+  - talkmap.ipynb
+  - CONTRIBUTING.md
   - package-lock.json
   - scripts
   - src
@@ -226,21 +258,36 @@ collections:
     output: true
     permalink: /journal/:path/
   teaching:
-    output: true
+    output: false
     permalink: /:collection/:path/
   publications:
     output: true
     permalink: /:collection/:path/
   portfolio:
-    output: true
+    output: false
     permalink: /:collection/:path/
   talks:
-    output: true
+    output: false
     permalink: /:collection/:path/
 
 
 # These settings control how pages and collections are included in the site
 defaults:
+  # Opt in only genuine public content; static assets and utility pages stay out.
+  - scope:
+      path: ""
+    values:
+      sitemap: false
+  - scope:
+      path: ""
+      type: notes
+    values:
+      sitemap: true
+  - scope:
+      path: ""
+      type: photo_stories
+    values:
+      sitemap: true
   # _posts
   - scope:
       path: ""
@@ -274,6 +321,7 @@ defaults:
       type: publications
     values:
       layout: single
+      sitemap: true
       author_profile: true
       share: true
       comments: true
@@ -311,7 +359,6 @@ timezone: Etc/UTC # http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 
 # Plugins
 plugins:
-  - jekyll-feed
   - jekyll-gist
   - jekyll-paginate
   - jekyll-sitemap
@@ -319,7 +366,6 @@ plugins:
 
 # Mimic GitHub Pages with --safe
 whitelist:
-  - jekyll-feed
   - jekyll-gist
   - jekyll-paginate
   - jekyll-sitemap

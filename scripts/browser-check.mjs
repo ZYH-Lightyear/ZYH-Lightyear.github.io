@@ -51,6 +51,8 @@ try {
     permissions: ["clipboard-read", "clipboard-write"],
   });
   await page.goto(base);
+  assert.equal(await page.title(), "Yehang Zhang | HKUST (Guangzhou)");
+  assert.equal(await page.locator('meta[property="og:title"]').getAttribute("content"), await page.title());
   await page.locator("canvas[data-world-renderer]").waitFor();
   await page.waitForFunction(
     () => document.querySelector("#world-fallback").hidden,

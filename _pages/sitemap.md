@@ -1,37 +1,37 @@
 ---
-layout: archive
+layout: studio-entry
 title: "Sitemap"
 permalink: /sitemap/
-author_profile: true
+sitemap: false
 ---
 
-{% include base_path %}
+- [Yehang Zhang — Home](/)
+- [Publications](/#publications)
+- [Education & Experience](/#experience)
+- [Notes](/#notes)
+- [Photos](/#gallery)
 
-A list of all the posts and pages found on the site. For you robots out there is an [XML version]({{ base_path }}/sitemap.xml) available for digesting as well.
+## Papers
 
-<h2>Pages</h2>
-{% for post in site.pages %}
-  {% include archive-single.html %}
-{% endfor %}
+{% assign papers = site.publications | sort: 'date' | reverse %}
+{% for paper in papers %}{% unless paper.published == false %}
+- [{{ paper.title }}]({{ paper.url | prepend: site.baseurl }})
+{% endunless %}{% endfor %}
 
-<h2>Posts</h2>
-{% for post in site.posts %}
-  {% include archive-single.html %}
-{% endfor %}
+{% if site.notes.size > 0 %}
+## Notes
 
-{% capture written_label %}'None'{% endcapture %}
+{% for note in site.notes %}{% unless note.published == false %}
+- [{{ note.title }}]({{ note.url | prepend: site.baseurl }})
+{% endunless %}{% endfor %}
+{% endif %}
 
-{% for collection in site.collections %}
-{% unless collection.output == false or collection.label == "posts" %}
-  {% capture label %}{{ collection.label }}{% endcapture %}
-  {% if label != written_label %}
-  <h2>{{ label }}</h2>
-  {% capture written_label %}{{ label }}{% endcapture %}
-  {% endif %}
-{% endunless %}
-{% for post in collection.docs %}
-  {% unless collection.output == false or collection.label == "posts" %}
-  {% include archive-single.html %}
-  {% endunless %}
-{% endfor %}
-{% endfor %}
+{% if site.photo_stories.size > 0 %}
+## Photo stories
+
+{% for story in site.photo_stories %}{% unless story.published == false %}
+- [{{ story.title }}]({{ story.url | prepend: site.baseurl }})
+{% endunless %}{% endfor %}
+{% endif %}
+
+[XML sitemap](/sitemap.xml)

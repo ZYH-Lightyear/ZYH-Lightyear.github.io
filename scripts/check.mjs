@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFile, readdir } from "node:fs/promises";
 import { gzipSync } from "node:zlib";
 import path from "node:path";
-import { root, getSite, bundleAssets, renderPages } from "./build.mjs";
+import { root, getSite, frontmatter, bundleAssets, renderPages } from "./build.mjs";
 
 const site = await getSite();
 const approvedCitations = JSON.parse(await readFile(path.join(root, "scripts/fixtures/approved-citations.json"), "utf8"));
@@ -53,6 +53,39 @@ for (const district of site.data.studio.districts) {
 }
 await bundleAssets();
 const { html } = await renderPages();
+const homePage = (await frontmatter(path.join(root, "_pages/about.md"))).data;
+assert.equal(homePage.title, "Yehang Zhang | HKUST (Guangzhou)");
+assert.ok(html.includes(`<title>${homePage.title}</title>`));
+assert.ok(html.includes(`<meta property="og:title" content="${homePage.title}"`));
+assert.ok(html.includes(`rel="canonical" href="${site.url}${site.baseurl}/"`));
+assert.ok(!/Lighthearted Homepage|Short Bio|<title>.*Research Neighborhood/.test(html));
+assert.equal(homePage.sitemap, true);
+assert.equal(site.future, false);
+assert.equal(site.atom_feed.hide, true);
+assert.ok(!site.plugins.includes("jekyll-feed"));
+assert.equal(site.defaults[0].values.sitemap, false, "Sitemap must opt in real content, not every static file.");
+for (const type of ["publications", "notes", "photo_stories"]) {
+  assert.equal(site.defaults.find(rule => rule.scope.type === type).values.sitemap, true);
+  assert.equal(site.collections[type].output, true);
+}
+for (const type of ["portfolio", "talks", "teaching"]) assert.equal(site.collections[type].output, false);
+for (const file of ["_posts", "_portfolio", "_talks", "_teaching", "_notes/README.md", "_photo_stories/README.md",
+  "_pages/cv.md", "_pages/markdown.md", "_pages/terms.md", "_pages/year-archive.html",
+  "files/paper1.pdf", "files/paper2.pdf", "files/paper3.pdf", "files/slides1.pdf", "files/slides2.pdf", "files/slides3.pdf",
+  "markdown_generator", "talkmap", "talkmap.py", "talkmap.ipynb"]) {
+  assert.ok(site.exclude.includes(file), `Template content must not be published: ${file}`);
+}
+const retainedPages = [];
+for (const file of await readdir(path.join(root, "_pages"))) {
+  if (site.exclude.includes(`_pages/${file}`)) continue;
+  retainedPages.push(file);
+  const { content } = await frontmatter(path.join(root, "_pages", file));
+  assert.ok(!/GitHub University|Professor Hub|sample blog post|2199/.test(content));
+}
+assert.deepEqual(retainedPages.sort(), ["404.md", "about.md", "publications.html", "sitemap.md"]);
+assert.equal((await frontmatter(path.join(root, "_pages/publications.html"))).data.sitemap, true);
+assert.ok(!site.exclude.includes("files/An_Enhanced_XGBoost_Algorithm_for_Mobile_Price_Classification.pdf"));
+console.log("PASS: homepage search metadata, opt-in sitemap, template exclusions, real content retained.");
 assert.ok(html.includes("† Co-first author") && html.includes("✉ Corresponding author"));
 for (const role of ["Co-first author", "Corresponding author"]) {
   const field = role === "Co-first author" ? "co_first_authors" : "corresponding_authors";
