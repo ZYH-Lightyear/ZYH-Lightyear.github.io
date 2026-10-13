@@ -2,7 +2,7 @@
 permalink: /
 title: "Yehang Zhang | HKUST (Guangzhou)"
 sitemap: true
-last_modified_at: 2026-09-29
+last_modified_at: 2026-10-13
 layout: research-home
 author_profile: false
 redirect_from: 

@@ -246,36 +246,16 @@
         <div class="section-heading">
           <div>
             <p class="eyebrow">01 / RESEARCH</p>
-            <h2 id="publications-title">Publications</h2>
+            <h2 id="publications-title">Selected Papers</h2>
           </div>
           <a
             class="text-link"
             href="{{ site.author.googlescholar }}"
             target="_blank"
             rel="noopener noreferrer"
-            >All work on Scholar
+            >All papers (Google Scholar)
             <svg class="icon"><use href="#i-external" /></svg
           ></a>
-        </div>
-        <div class="research-toolbar">
-          <div
-            class="pub-button-container"
-            role="group"
-            aria-label="Filter publications"
-          >
-            <button
-              class="pub-button active"
-              data-filter="all"
-              aria-pressed="true"
-            >
-              All papers</button
-            ><button class="pub-button" data-filter="selected" aria-pressed="false">
-              Selected
-            </button>
-          </div>
-          <span class="research-count" id="research-count" aria-live="polite"
-            >{{ site.publications.size }} papers</span
-          >
         </div>
         <p class="authorship-legend"><span>† Co-first author</span><span>✉ Corresponding author</span></p>
         <div
@@ -289,22 +269,7 @@
             class="publication-card"
             id="paper-{{ paper.slug }}"
             data-paper="{{ paper.slug }}"
-            data-selected="{{ paper.selected }}"
           >
-            {% if paper.selected %}
-            <a
-              class="paper-art art-{{ paper.slug }}"
-              href="{{ paper.paperurl }}"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Read {{ paper.short_title }}"
-            >
-              <span class="art-grid" aria-hidden="true"></span
-              ><span class="art-diagram" aria-hidden="true"
-                ><i></i><i></i><i></i><i></i><i></i></span
-              ><span class="art-name">{{ paper.short_title }}</span>
-            </a>
-            {% endif %}
             <div class="paper-copy">
               <h3>
                 <a
@@ -338,9 +303,6 @@
           </article>
           {% endfor %}
         </div>
-        <p class="filter-note" id="filter-note" hidden>
-          No papers selected.
-        </p>
       </section>
 
       <section

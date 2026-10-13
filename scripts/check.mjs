@@ -42,8 +42,6 @@ for (const paper of site.publications) {
     for (const author of paper[role]) assert.ok(authors.includes(author), `Unknown ${role}: ${author}`);
   }
 }
-assert.deepEqual(site.publications.filter(p => p.selected).map(p => p.slug).sort(),
-  ["orchestrating-audio", "videomemory", "worldlines"]);
 const ids = new Set(site.publications.map((paper) => paper.slug));
 assert.equal(new Set(site.data.studio.districts.map((d) => d.id)).size, 5);
 for (const district of site.data.studio.districts) {
@@ -112,6 +110,10 @@ assert.ok(
   "All Liquid markup must be rendered.",
 );
 assert.ok(html.includes("I_C_lPYAAAAJ"), "Keep the author’s Scholar profile.");
+assert.ok(html.includes('<h2 id="publications-title">Selected Papers</h2>'));
+assert.ok(html.includes("All papers (Google Scholar)"));
+assert.ok(!/data-filter=|data-selected=|class="paper-art|pub-button|filter-note/.test(html),
+  "One plain Selected Papers list replaces the old all/selected modes.");
 assert.ok(
   html.includes("first-year PhD") &&
     html.includes("MPhil in Artificial Intelligence"),

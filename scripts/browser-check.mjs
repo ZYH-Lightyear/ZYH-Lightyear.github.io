@@ -76,9 +76,12 @@ try {
     }
   }
   report("co-first and corresponding-author markers match every publication's metadata");
-  assert.equal(await page.locator(".pub-button").count(), 2);
+  assert.equal(await page.locator(".pub-button, [data-filter], .paper-art").count(), 0);
+  assert.equal(await page.locator("#publications-title").textContent(), "Selected Papers");
+  const allPapersLink = page.getByRole("link", { name: "All papers (Google Scholar)", exact: true });
+  assert.ok(await allPapersLink.isVisible());
+  assert.equal(await allPapersLink.getAttribute("href"), site.author.googlescholar);
   assert.equal(await page.locator(".resume-row").count(), 4);
-  assert.equal(await page.locator('[data-filter="all"]').getAttribute("aria-pressed"), "true");
   assert.equal(
     await page.locator("#motion-toggle").getAttribute("aria-pressed"),
     "true",
@@ -150,20 +153,9 @@ try {
   assert.equal(await page.locator("#workspace-popover").evaluate(node => node.getAnimations().length), 0);
   await page.keyboard.press("Escape");
   assert.equal(await page.locator(".publication-card:visible").count(), 7);
-  await page.locator("#publications").screenshot({ path: path.join(screenshots, "publications-all.png") });
-  await page.locator("#experience").screenshot({ path: path.join(screenshots, "experience.png") });
-  await page.locator('[data-filter="selected"]').click();
-  assert.equal(await page.locator(".paper-art:visible").count(), 3);
-  assert.deepEqual(
-    (
-      await page
-        .locator(".publication-card:visible")
-        .evaluateAll((nodes) => nodes.map((n) => n.dataset.paper))
-    ).sort(),
-    ["orchestrating-audio", "videomemory", "worldlines"],
-  );
   await page.locator("#publications").screenshot({ path: path.join(screenshots, "publications-selected.png") });
-  report("research preview stays within workspace, has no paper link, closes with focus restored; Selected contains three approved papers");
+  await page.locator("#experience").screenshot({ path: path.join(screenshots, "experience.png") });
+  report("research preview stays within workspace; Selected Papers is one seven-paper text list with a Scholar link");
 
   await page.locator('[data-cite="orchestrating-audio"]').click();
   assert.ok(
@@ -184,7 +176,6 @@ try {
     "orchestrating-audio",
   );
   report("paper dialog, working citation copy, Escape and focus restoration");
-  await page.locator('[data-filter="all"]').click();
   for (const [slug, citation] of Object.entries(approvedCitations)) {
     await page.locator(`[data-cite="${slug}"]`).click();
     assert.equal(await page.locator(".citation-text").textContent(), citation);
@@ -341,14 +332,15 @@ try {
   await touchSession.detach();
   await mobile.page.locator("#reset-view").tap();
   report("mobile two-finger pinch zoom without accidental district selection");
-  await mobile.page.locator('[data-filter="selected"]').tap();
-  assert.equal(await mobile.page.locator(".paper-art:visible").count(), 3);
+  assert.equal(await mobile.page.locator(".publication-card:visible").count(), 7);
+  assert.equal(await mobile.page.locator(".pub-button, .paper-art").count(), 0);
+  assert.ok(await mobile.page.getByRole("link", { name: "All papers (Google Scholar)", exact: true }).isVisible());
+  await mobile.page.locator("#publications").screenshot({ path: path.join(screenshots, "publications-mobile.png") });
   await noOverflow(mobile.page);
   await mobile.page.locator('[data-cite="worldlines"]').tap();
   await noOverflow(mobile.page);
   assert.ok((await mobile.page.locator(".citation-text").textContent()).includes("2606.18847"));
   await mobile.page.locator("#close-dialog").tap();
-  await mobile.page.locator('[data-filter="all"]').tap();
   await mobile.page.locator('[data-photo="aircraft"]').tap();
   assert.equal(await mobile.page.locator("#dialog-title").textContent(), "2024 · Zhuhai Airshow");
   await noOverflow(mobile.page);

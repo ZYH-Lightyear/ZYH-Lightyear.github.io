@@ -1,10 +1,9 @@
-// WowPage's selected/full-publication pattern, extended with research districts.
+// Academic content and interactive research districts.
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
 const studio = JSON.parse($("#studio-data").textContent);
 const entries = JSON.parse($("#notebook-entries").textContent);
 const motionPreference = matchMedia("(prefers-reduced-motion: reduce)");
-const cards = $$(".publication-card");
 const dialog = $("#content-dialog");
 const content = $("#dialog-content");
 const workspacePopover = $("#workspace-popover");
@@ -28,29 +27,6 @@ function toast(message) {
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => $("#toast").classList.remove("visible"), 2600);
 }
-function filterPublications(type) {
-  $("#paper-list").classList.toggle("selected-view", type === "selected");
-  let count = 0;
-  for (const card of cards) {
-    const show = type === "all" || card.dataset.selected === "true";
-    card.hidden = !show;
-    if (show) count++;
-  }
-  $$(".pub-button").forEach((button) => {
-    const active = button.dataset.filter === type;
-    button.classList.toggle("active", active);
-    button.setAttribute("aria-pressed", String(active));
-  });
-  $("#research-count").textContent =
-    `${count} ${count === 1 ? "paper" : "papers"}`;
-  $("#filter-note").hidden = count !== 0;
-}
-$$(".pub-button").forEach((button) =>
-  button.addEventListener("click", () =>
-    filterPublications(button.dataset.filter),
-  ),
-);
-filterPublications("all");
 
 function closeWorkspacePopover(restoreFocus = true) {
   if (workspacePopover.hidden) return;
@@ -324,7 +300,6 @@ function applyView() {
     : "Academic view";
   if (academic) {
     closeWorkspacePopover(false);
-    filterPublications("all");
   }
   world?.pause(paused || academic);
 }
@@ -397,7 +372,6 @@ function revealLinkedPaper() {
   if (location.hash.startsWith("#paper-")) {
     const card = document.getElementById(location.hash.slice(1));
     if (card?.classList.contains("publication-card")) {
-      filterPublications("all");
       card.scrollIntoView();
     }
   }

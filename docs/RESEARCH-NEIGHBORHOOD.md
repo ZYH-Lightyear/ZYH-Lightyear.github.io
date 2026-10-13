@@ -90,9 +90,10 @@ The publishing source remains `master`; no repository Pages settings were change
 Publication details and BibTeX follow the user's supplied records. World Action Agent
 was added as a preprint; its September 24, 2026 submission date is from its arXiv page.
 IEEE Access PCSA is excluded as requested. DALFNet is retained in source with
-`published: false` and excluded from the site. All papers is the default clean text
-list with seven papers.
-Selected contains only Orchestrating Audio, VideoMemory, and WorldLines with thumbnails.
+`published: false` and excluded from the site. Selected Papers is a single clean text
+list retaining all seven previously displayed papers. The old All/Selected switch
+and three-paper thumbnail view were removed on 2026-10-13. The adjacent
+"All papers (Google Scholar)" link opens the author's complete Scholar profile.
 No topic filters or overview dialogs are displayed. District windows do not filter
 or jump to papers. Cite opens copyable BibTeX, not a prose citation.
 WorldLines displays EMNLP 2026 as requested, while its Cite entry retains the
@@ -100,8 +101,8 @@ user-specified arXiv `@misc` record. Original citation keys, field values, autho
 order, and optional fields are preserved; pasted Markdown URL wrappers are removed.
 `scripts/fixtures/approved-citations.json` holds the supplied citations for regression
 checks; both data tests and browser clipboard tests compare all seven entries exactly.
-The three selected papers' full author names were checked against ACL/arXiv.
-Paper-card illustrations are conceptual graphics, not reproduced paper figures.
+The former three-paper selection's metadata remains in source for reference but no
+longer controls which papers are shown. Author markers and Cite remain unchanged.
 The profile keeps the first-year PhD, Ying-Cong Chen (PhD and MPhil), and Knowin AI
 internship details from the existing homepage.
 
