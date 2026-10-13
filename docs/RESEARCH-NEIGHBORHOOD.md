@@ -56,7 +56,7 @@ links are shown in these windows. Close with × or Escape; keyboard focus return
 the opener. Opening animations respect reduced-motion preferences.
 Use the light switch for evening, pause for stillness, and reset to restore the camera.
 Camera and scene updates stop offscreen / in background tabs. Reduced-motion preferences
-start the world paused. Academic view hides the world, shows all seven listed papers, and
+start the world paused. Academic view hides the world, shows all eight listed papers, and
 persists locally. No CDN or external font requests are needed for the page or scene.
 
 ## Where to maintain content
@@ -91,7 +91,8 @@ Publication details and BibTeX follow the user's supplied records. World Action 
 was added as a preprint; its September 24, 2026 submission date is from its arXiv page.
 IEEE Access PCSA is excluded as requested. DALFNet is retained in source with
 `published: false` and excluded from the site. Selected Papers is a single clean text
-list retaining all seven previously displayed papers. The old All/Selected switch
+list retaining all seven previously displayed papers, plus In-Context Learning for
+Robots (added 2026-10-13 as Preprint, 2026). The old All/Selected switch
 and three-paper thumbnail view were removed on 2026-10-13. The adjacent
 "All papers (Google Scholar)" link opens the author's complete Scholar profile.
 No topic filters or overview dialogs are displayed. District windows do not filter
@@ -100,7 +101,9 @@ WorldLines displays EMNLP 2026 as requested, while its Cite entry retains the
 user-specified arXiv `@misc` record. Original citation keys, field values, author
 order, and optional fields are preserved; pasted Markdown URL wrappers are removed.
 `scripts/fixtures/approved-citations.json` holds the supplied citations for regression
-checks; both data tests and browser clipboard tests compare all seven entries exactly.
+checks; both data tests and browser clipboard tests compare all eight entries exactly.
+The original seven entries are user-provided; Robot ICL uses the official project
+page's downloadable BibTeX, including all 39 authors.
 The former three-paper selection's metadata remains in source for reference but no
 longer controls which papers are shown. Author markers and Cite remain unchanged.
 The profile keeps the first-year PhD, Ying-Cong Chen (PhD and MPhil), and Knowin AI

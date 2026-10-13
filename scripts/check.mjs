@@ -8,8 +8,8 @@ const site = await getSite();
 const approvedCitations = JSON.parse(await readFile(path.join(root, "scripts/fixtures/approved-citations.json"), "utf8"));
 assert.equal(
   site.publications.length,
-  7,
-  "Show seven publications including World Action Agent; keep DALFNet unpublished.",
+  8,
+  "Show eight publications including Robot ICL; keep DALFNet unpublished.",
 );
 assert.ok(
   site.publications.every((paper) => !/\bPCSA\b|DALFNet/i.test(paper.title)),
@@ -98,10 +98,14 @@ for (const slug of ["worldlines", "world-action-agent", "videomemory"]) {
 }
 assert.deepEqual(
   [...html.matchAll(/class="paper-venue">([^<]+)</g)].map(match => match[1]),
-  ["Preprint, 2026", "Preprint, 2026", "EMNLP 2026", "ICASSP 2026", "Preprint, 2026", "EMNLP 2025", "BDAI 2023"],
+  ["Preprint, 2026", "Preprint, 2026", "Preprint, 2026", "EMNLP 2026", "ICASSP 2026", "Preprint, 2026", "EMNLP 2025", "BDAI 2023"],
   "Use concise venue labels, including WorldLines at EMNLP 2026.",
 );
 const worldlines = site.publications.find(paper => paper.slug === "worldlines");
+const robotIcl = site.publications.find(paper => paper.slug === "robot-icl");
+assert.equal(robotIcl.authors.replace(", and ", ", ").split(", ").length, 39);
+assert.deepEqual(robotIcl.corresponding_authors, ["Ying-Cong Chen", "Yinchuan Li"]);
+assert.equal(robotIcl.display_venue, "Preprint, 2026");
 assert.equal(worldlines.category, "conferences");
 assert.equal(worldlines.display_venue, "EMNLP 2026");
 assert.match(worldlines.bibtex, /^@misc\{zhang2026worldlinesbenchmarkingmodelinglonghorizon,/);
@@ -140,7 +144,7 @@ assert.ok(
   "Keep the initial UI bundle under 15 KB compressed.",
 );
 console.log(
-  `PASS: biography, seven papers, exact user-provided citations, five district mappings, template removal, unique IDs, anchors, build.`,
+  `PASS: biography, eight papers, exact citation fixtures, five district mappings, template removal, unique IDs, anchors, build.`,
 );
 console.log(
   `Initial UI JavaScript: ${(mainBytes / 1024).toFixed(1)} KB gzip. Three.js loads separately on demand (${chunks.filter((f) => f.endsWith(".js")).length} chunk files).`,

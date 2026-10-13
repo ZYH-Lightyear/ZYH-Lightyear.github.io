@@ -15,3 +15,5 @@ Verified on 2026-09-28:
 | RSC-CoT | Yehang Zhang; Bo Wang; Zihang Shao | Wufan Zhao | Co-first and corresponding authors supplied by the site owner on 2026-09-28 |
 
 Project leadership is a distinct role, not corresponding authorship. Xinli Xu's project-leader mark in VideoMemory and Zexi Li's project-leader marks in WorldLines and World Action Agent are deliberately not converted into corresponding-author marks.
+
+Added 2026-10-13: **In-Context Learning for Robots: Methods and Applications**. The [official project page](https://jethrojames.github.io/awesome-robots-icl/) marks Ying-Cong Chen and Yinchuan Li as corresponding authors and indicates no co-first authors. Its downloadable `citation.bib` supplies the complete 39-author citation; title, author order, and September 28, 2026 submission date also match [arXiv](https://arxiv.org/abs/2609.36012).

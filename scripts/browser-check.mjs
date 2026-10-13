@@ -60,8 +60,8 @@ try {
   assert.equal(await page.locator(".world-hotspot").count(), 5);
   assert.ok(await page.locator("#workspace-popover").isHidden());
   assert.equal(await page.locator("#district-detail, #district-action").count(), 0);
-  assert.equal(await page.locator(".publication-card:visible").count(), 7);
-  assert.equal(await page.locator(".publication-card:visible").first().getAttribute("data-paper"), "world-action-agent");
+  assert.equal(await page.locator(".publication-card:visible").count(), 8);
+  assert.equal(await page.locator(".publication-card:visible").first().getAttribute("data-paper"), "robot-icl");
   assert.equal(await page.locator('[data-paper="dalfnet"]').count(), 0);
   assert.equal(await page.locator(".paper-art:visible").count(), 0);
   assert.ok(await page.locator(".authorship-legend").isVisible());
@@ -95,7 +95,7 @@ try {
     .locator("#world-frame")
     .screenshot({ path: path.join(screenshots, "world-day.png") });
   report(
-    "desktop WebGL renderer, five hotspots, seven papers by default, four résumé rows",
+    "desktop WebGL renderer, five hotspots, eight papers by default, four résumé rows",
   );
 
   // Click the real Three.js book and photo geometries at the fixed overview camera.
@@ -152,10 +152,10 @@ try {
   assert.ok(await page.locator("#workspace-popover").isVisible());
   assert.equal(await page.locator("#workspace-popover").evaluate(node => node.getAnimations().length), 0);
   await page.keyboard.press("Escape");
-  assert.equal(await page.locator(".publication-card:visible").count(), 7);
+  assert.equal(await page.locator(".publication-card:visible").count(), 8);
   await page.locator("#publications").screenshot({ path: path.join(screenshots, "publications-selected.png") });
   await page.locator("#experience").screenshot({ path: path.join(screenshots, "experience.png") });
-  report("research preview stays within workspace; Selected Papers is one seven-paper text list with a Scholar link");
+  report("research preview stays within workspace; Selected Papers is one eight-paper text list with a Scholar link");
 
   await page.locator('[data-cite="orchestrating-audio"]').click();
   assert.ok(
@@ -183,7 +183,7 @@ try {
     assert.equal(await page.evaluate(() => navigator.clipboard.readText()), citation);
     await page.keyboard.press("Escape");
   }
-  report("all seven Cite dialogs copy the complete user-approved BibTeX exactly");
+  report("all eight Cite dialogs copy the complete citation fixtures exactly");
 
   await page.locator('[data-notebook="memory"]').click();
   assert.equal(await page.locator("#dialog-title").textContent(), "On memory");
@@ -222,7 +222,7 @@ try {
 
   await page.locator("#academic-toggle").click();
   assert.ok(await page.locator("#neighborhood").isHidden());
-  assert.equal(await page.locator(".publication-card:visible").count(), 7);
+  assert.equal(await page.locator(".publication-card:visible").count(), 8);
   await page.reload();
   assert.ok(await page.locator("#neighborhood").isHidden());
   assert.equal(
@@ -332,7 +332,7 @@ try {
   await touchSession.detach();
   await mobile.page.locator("#reset-view").tap();
   report("mobile two-finger pinch zoom without accidental district selection");
-  assert.equal(await mobile.page.locator(".publication-card:visible").count(), 7);
+  assert.equal(await mobile.page.locator(".publication-card:visible").count(), 8);
   assert.equal(await mobile.page.locator(".pub-button, .paper-art").count(), 0);
   assert.ok(await mobile.page.getByRole("link", { name: "All papers (Google Scholar)", exact: true }).isVisible());
   await mobile.page.locator("#publications").screenshot({ path: path.join(screenshots, "publications-mobile.png") });
@@ -387,7 +387,7 @@ try {
   await fallback.page.locator("#close-workspace-popover").click();
   assert.equal(
     await fallback.page.locator(".publication-card:visible").count(),
-    7,
+    8,
   );
   report(
     "WebGL-unavailable fallback preserves district navigation and publications",
@@ -399,7 +399,7 @@ try {
     viewport: { width: 1024, height: 768 },
   });
   await nojs.page.goto(base);
-  assert.equal(await nojs.page.locator(".publication-card:visible").count(), 7);
+  assert.equal(await nojs.page.locator(".publication-card:visible").count(), 8);
   assert.ok(
     await nojs.page.locator('a[href*="I_C_lPYAAAAJ"]').first().isVisible(),
   );
